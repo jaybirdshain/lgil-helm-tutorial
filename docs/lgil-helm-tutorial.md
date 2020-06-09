@@ -13,6 +13,100 @@ The Helm engine is based on go template so that the syntax is composed of Kubern
 
 Helm uses the Go template engine to separate the deployment configuration from the deployment logic.
 
+**Without Helm**
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-kubernetes
+spec:
+ type: ClusterIP
+ ports:
+ - port: 80
+   targetPort: 8080
+ selector:
+  app: hello-kubernetes
+  
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: hello-kubernetes
+spec:
+ replicas: 2
+ selector:
+  matchLabels:
+   app: hello-kubernetes
+ template:
+  metadata:
+   labels:
+    app: hello-kubernetes
+  spec:
+   containers:
+   - name: hello-kubernetes
+     image: paulbouwer/hello-kubernetes:1.8
+     ports:
+     - containerPort: 8080
+     env:
+     - name: MESSAGE
+       value: Hello World
+```
+
+With a such Kubernetes manifest manage multiple environment implies to either :
+
+* Create one manifest file per environment
+* Introduce some placeholder and create scripts to replace it from configuration files
+
+**With Helm**
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.app }}
+spec:
+ type: ClusterIP
+ ports:
+ - port: 80
+   targetPort: {{ .Values.port }}
+ selector:
+  app: {{ .Values.app }}
+  
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: {{ .Values.app }}
+spec:
+ replicas: "{{ .Values.replicas }}"
+ selector:
+  matchLabels:
+   app: {{ .Values.app }}
+ template:
+  metadata:
+   labels:
+    app: {{ .Values.app }}
+  spec:
+   containers:
+   - name: hello-kubernetes
+     image: "{{ .Values.image }}:{{ .Values.tag }}"
+     ports:
+     - containerPort: {{ .Values.port }}
+     env:
+     - name: MESSAGE
+       value: {{ .Values.message}}
+```
+The configuration code (value.yaml) :
+```
+app: hello-kubernetes
+port: 8080
+image: paulbouwer/hello-kubernetes
+tag: 1.8
+replicas: 2
+message: My message coming from the config file
+```
+
 ### Helm versions
 They are two production versions of Helm, the version 2 based on a client server architecture and the version 3 which replaces the server side with a Helm library.
 
