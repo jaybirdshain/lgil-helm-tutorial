@@ -132,7 +132,7 @@ All the deployment parameters are gathered into the values.yaml file, by default
 The default configuration exposes the port 80, to use another port you have to edit the deployment.yml file (copy the file to the Helm chart folder).
 
 ### Install / upgrade
-The command below performs an upgrade or update depending of if the application was already deployed or not.
+The command below performs an install or update depending of if the application was already deployed or not.
 
 `helm upgrade --install --namespace helm-demo -f website/values.yaml -f website/values-apache.yaml website ./website`
 
