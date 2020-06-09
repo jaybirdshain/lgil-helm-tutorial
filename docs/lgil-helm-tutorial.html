@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/ -->
+<html lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>tutorials | A set of different tutorials</title>
+<meta name="generator" content="Jekyll v3.8.5">
+<meta property="og:title" content="tutorials">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="A set of different tutorials">
+<meta property="og:description" content="A set of different tutorials">
+<link rel="canonical" href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/">
+<meta property="og:url" content="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/">
+<meta property="og:site_name" content="tutorials">
+<script type="application/ld+json">
+{"description":"A set of different tutorials","@type":"WebPage","url":"https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/","headline":"tutorials","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <style class="anchorjs"></style><link rel="stylesheet" href="./tutorials _helm_files/style.css">
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="https://github.dxc.com/pages/lgil3/tutorials/">tutorials</a></h1>
+      
+
+      <style>
+
+img[src*="#questions"]{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  width: 30%;
+
+  border-radius: 25% 10%;
+  border: solid;
+}
+
+.left {
+  float: left;
+  border-right: solid thin;
+  padding-top: 0.6em;
+  padding-right: 0.6em;
+  overflow-wrap: normal;
+  width: 49%;
+}
+
+.right {
+  float: right;
+  overflow-wrap: normal;
+  padding-top: 0.6em;
+  padding-left: 0.6em;
+  width: 49%;
+}
+
+#page-header{
+  width: 100%;
+  text-align:center;
+  opacity: 0.5;
+
+}
+
+.header-logo-left{
+  float: left;
+  width: 15%;
+}
+
+.header-logo-right{
+  display: inline-block;
+  float: right;
+  width: 10%;
+}
+
+.header-logo-center{
+  display: inline-block;
+  width: 10%;
+  margin:0 auto;
+
+}
+
+#logo{
+  float: right;
+  width: 15%;
+}
+.clean {
+  clear: both;
+}
+
+</style>
+
+<div id="page-header">
+
+<div class="header-logo-left">
+  <a href="https://dxc.workplace.com/groups/175310193151261/" target="_blank"><img src="./tutorials _helm_files/0711e33bf1729c3a1186fa0b01623bd9.png"></a>
+</div>
+
+<div class="header-logo-center">
+  <a href="https://github.dxc.com/pages/Platform-DXC/devcloud-docs/" target="_blank"><img src="./tutorials _helm_files/devops.png"></a>
+</div>
+
+<div class="header-logo-right">
+<a href="https://helm.sh/" target="_blank"><img src="./tutorials _helm_files/Helm-Logo_Plan-de-travail-1.png"></a>
+</div>
+
+</div>
+
+<div class="clean"></div>
+
+<h1 id="kubernetes---manage-applications-with-helm">Kubernetes - manage applications with Helm</h1>
+
+<h2 id="what-is-helm-">What is Helm ?<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#what-is-helm-" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+
+<blockquote>
+  <p>Helm is for Kubernetes what apt is for Linux.</p>
+</blockquote>
+
+<p>This is a package manager which allows to easily manage applications deployment in a repeatable manner.</p>
+
+<h2 id="helm-benefits">Helm benefits<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#helm-benefits" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+
+<ul>
+  <li>Share deployment manifest</li>
+  <li>Version deployment manifest</li>
+  <li>Split configuration from the deployment code</li>
+  <li>Repeatable / predictable deployment</li>
+  <li>Compose Helm package named Chart to create an application deployment</li>
+</ul>
+
+<h2 id="syntax">Syntax<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#syntax" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+
+<p>The Helm engine is based on go template so that the syntax is composed of Kubernetes yaml manifest and go template in addition to some Helm functions.</p>
+
+<div class="left">
+
+  <h3 id="without-helm"> Without Helm<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#without-helm" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+
+  <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Service</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">hello-kubernetes</span>
+<span class="na">spec</span><span class="pi">:</span>
+ <span class="na">type</span><span class="pi">:</span> <span class="s">ClusterIP</span>
+ <span class="na">ports</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="na">port</span><span class="pi">:</span> <span class="m">80</span>
+   <span class="na">targetPort</span><span class="pi">:</span> <span class="m">8080</span>
+ <span class="na">selector</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span> <span class="s">hello-kubernetes</span>
+  
+<span class="nn">---</span>
+
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<span class="na">metadata</span><span class="pi">:</span>
+ <span class="na">name</span><span class="pi">:</span> <span class="s">hello-kubernetes</span>
+<span class="na">spec</span><span class="pi">:</span>
+ <span class="na">replicas</span><span class="pi">:</span> <span class="m">2</span>
+ <span class="na">selector</span><span class="pi">:</span>
+  <span class="na">matchLabels</span><span class="pi">:</span>
+   <span class="na">app</span><span class="pi">:</span> <span class="s">hello-kubernetes</span>
+ <span class="na">template</span><span class="pi">:</span>
+  <span class="na">metadata</span><span class="pi">:</span>
+   <span class="na">labels</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">hello-kubernetes</span>
+  <span class="na">spec</span><span class="pi">:</span>
+   <span class="na">containers</span><span class="pi">:</span>
+   <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">hello-kubernetes</span>
+     <span class="na">image</span><span class="pi">:</span> <span class="s">paulbouwer/hello-kubernetes:1.8</span>
+     <span class="na">ports</span><span class="pi">:</span>
+     <span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="m">8080</span>
+     <span class="na">env</span><span class="pi">:</span>
+     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">MESSAGE</span>
+       <span class="na">value</span><span class="pi">:</span> <span class="s">Hello World</span>
+</code></pre></div>  </div>
+
+  <p>With a such Kubernetes manifest manage multiple environment implies to either :</p>
+
+  <ul>
+    <li>Create one manifest file per environment</li>
+    <li>Introduce some placeholder and create scripts to replace it from configuration files</li>
+  </ul>
+</div>
+
+<div class="right">
+
+  <h3 id="with-helm">With Helm<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#with-helm" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+
+  <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Service</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="pi">{{</span> <span class="nv">.Values.app</span> <span class="pi">}}</span>
+<span class="na">spec</span><span class="pi">:</span>
+ <span class="na">type</span><span class="pi">:</span> <span class="s">ClusterIP</span>
+ <span class="na">ports</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="na">port</span><span class="pi">:</span> <span class="m">80</span>
+   <span class="na">targetPort</span><span class="pi">:</span> <span class="pi">{{</span> <span class="nv">.Values.port</span> <span class="pi">}}</span>
+ <span class="na">selector</span><span class="pi">:</span>
+  <span class="na">app</span><span class="pi">:</span> <span class="pi">{{</span> <span class="nv">.Values.app</span> <span class="pi">}}</span>
+  
+<span class="nn">---</span>
+
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<span class="na">metadata</span><span class="pi">:</span>
+ <span class="na">name</span><span class="pi">:</span> <span class="pi">{{</span> <span class="nv">.Values.app</span> <span class="pi">}}</span>
+<span class="na">spec</span><span class="pi">:</span>
+ <span class="na">replicas</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">.Values.replicas</span><span class="nv"> </span><span class="s">}}"</span>
+ <span class="na">selector</span><span class="pi">:</span>
+  <span class="na">matchLabels</span><span class="pi">:</span>
+   <span class="na">app</span><span class="pi">:</span> <span class="pi">{{</span> <span class="nv">.Values.app</span> <span class="pi">}}</span>
+ <span class="na">template</span><span class="pi">:</span>
+  <span class="na">metadata</span><span class="pi">:</span>
+   <span class="na">labels</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="pi">{{</span> <span class="nv">.Values.app</span> <span class="pi">}}</span>
+  <span class="na">spec</span><span class="pi">:</span>
+   <span class="na">containers</span><span class="pi">:</span>
+   <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">hello-kubernetes</span>
+     <span class="na">image</span><span class="pi">:</span> <span class="s2">"</span><span class="s">{{</span><span class="nv"> </span><span class="s">.Values.image</span><span class="nv"> </span><span class="s">}}:{{</span><span class="nv"> </span><span class="s">.Values.tag</span><span class="nv"> </span><span class="s">}}"</span>
+     <span class="na">ports</span><span class="pi">:</span>
+     <span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="pi">{{</span> <span class="nv">.Values.port</span> <span class="pi">}}</span>
+     <span class="na">env</span><span class="pi">:</span>
+     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">MESSAGE</span>
+       <span class="na">value</span><span class="pi">:</span> <span class="pi">{{</span> <span class="nv">.Values.message</span><span class="pi">}}</span>
+</code></pre></div>  </div>
+
+  <p>The configuration code (value.yaml) :</p>
+
+  <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">app</span><span class="pi">:</span> <span class="s">hello-kubernetes</span>
+<span class="na">port</span><span class="pi">:</span> <span class="m">8080</span>
+<span class="na">image</span><span class="pi">:</span> <span class="s">paulbouwer/hello-kubernetes</span>
+<span class="na">tag</span><span class="pi">:</span> <span class="m">1.8</span>
+<span class="na">replicas</span><span class="pi">:</span> <span class="m">2</span>
+<span class="na">message</span><span class="pi">:</span> <span class="s">My message coming from the config file</span>
+</code></pre></div>  </div>
+</div>
+
+<div class="clean"></div>
+
+<p>Helm uses the Go template engine to separate the deployment configuration from the deployment logic.</p>
+
+<h2 id="helm-versions">Helm versions<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#helm-versions" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+
+<p>They are two production versions of Helm, the version 2 based on a client server architecture and the version 3 which replaces the server side with a Helm library.</p>
+
+<div class="left">
+
+  <center>Helm 2</center>
+
+  <p><u>Client :</u></p>
+
+  <ul>
+    <li>Local chart development</li>
+    <li>Managing repositories</li>
+    <li>Managing releases</li>
+    <li>Interacting with the Tiller server :
+      <ul>
+        <li>Sending charts to be installed</li>
+        <li>Asking for information about releases</li>
+        <li>Requesting upgrading or uninstalling of existing releases</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p><u>Server :</u></p>
+
+  <ul>
+    <li>Listening for incoming requests from the Helm client</li>
+    <li>Combining a chart and configuration to build a release</li>
+    <li>Installing charts and then tracking the subsequent release</li>
+    <li>Upgrading and uninstalling charts</li>
+  </ul>
+
+</div>
+
+<div class="right">
+
+  <center>Helm 3</center>
+
+  <p><u>Client :</u></p>
+
+  <ul>
+    <li>Local chart development</li>
+    <li>Managing repositories</li>
+    <li>Managing releases</li>
+    <li>Interfacing  with the Helm library :
+      <ul>
+        <li>Sending charts to be installed</li>
+        <li>Requesting upgrading or uninstalling of existing releases</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p><u>Helm library :</u></p>
+
+  <ul>
+    <li>Combining a chat and configuration to build a release</li>
+    <li>Installing charts to Kubernetes and proving the subsequent release object</li>
+    <li>Upgrading and uninstalling charts by interacting with Kubernetes</li>
+  </ul>
+
+</div>
+
+<div class="clean"></div>
+
+<p><img src="./tutorials _helm_files/questions.png" alt=""></p>
+
+<h1 id="hands-on">Hands-on</h1>
+
+<h2 id="deploy-from-your-own-chart">Deploy from your own chart<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#deploy-from-your-own-chart" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+
+<p>In this use case we will create a simple hello world web site and deploy it with a Helm chart.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm create website
+</code></pre></div></div>
+
+<h3 id="folder-structure">Folder structure<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#folder-structure" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+
+<ul>
+  <li>charts folder: Used to contain chart dependencies / subcharts</li>
+  <li>template folder: Contains the template files which are the Kubernetes parametrized manifest</li>
+  <li>values.yaml: Used to configure the chart</li>
+  <li>Chart.yaml: Used to describe the chart</li>
+</ul>
+
+<blockquote>
+  <p><strong>Read the <a href="https://helm.sh/docs/chart_template_guide/getting_started/">official documentation</a></strong>
+<strong>Templates folder</strong></p>
+</blockquote>
+
+<p>Helm creates a package structure allowing us to deploy an application. We can see a <em>serviceaccount.yaml</em> file used to grant your application with permissions on the Kubernetes stack, the <em>ingress.yaml</em> and <em>service.yaml</em> files are used to access the application from outside the stack. Finally the <em>deployment.yaml</em> is used to deploy the application.</p>
+
+<p>By default Helm creates a <strong>deployment</strong> object which is convenient for most of the use cases, however if you want to use a Kubernetes <strong>statefulset</strong> you will have to create the associated manifest file into the <strong>templates</strong> folder.</p>
+
+<h3 id="configure-the-deployment">Configure the deployment<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#configure-the-deployment" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+
+<p>All the <strong>deployment</strong> parameters are gathered into the <em>values.yaml</em> file, by default Helm configures a Nginx stack deployment. We will change the configuration to deploy the httpd container. The <strong>deployment</strong> customization are in the <em>values-apache.yaml</em> file.</p>
+
+<p>The default configuration exposes the port 80, to use another port you have to edit the deployment.yml file (copy the file to the Helm chart folder).</p>
+
+<h3 id="install--upgrade">Install / upgrade<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#install--upgrade" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+
+<p>The command below performs an upgrade or update depending of if the application was already deployed or not.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm upgrade <span class="nt">--install</span> <span class="nt">--namespace</span> helm-demo <span class="nt">-f</span> website/values.yaml <span class="nt">-f</span> website/values-apache.yaml website ./website
+</code></pre></div></div>
+
+<p><em>We can customize the message in using a lifecycle hook in the deployment object.</em></p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="na">lifecycle</span><span class="pi">:</span>
+        <span class="na">postStart</span><span class="pi">:</span>
+            <span class="na">exec</span><span class="pi">:</span>
+            <span class="na">command</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">/bin/sh"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">-c"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">echo</span><span class="nv"> </span><span class="s">Hello</span><span class="nv"> </span><span class="s">world</span><span class="nv"> </span><span class="s">$(hostname</span><span class="nv"> </span><span class="s">-f)</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">/usr/local/apache2/htdocs/index.html"</span><span class="pi">]</span>
+</code></pre></div></div>
+
+<h3 id="delete-the-release">Delete the release<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#delete-the-release" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+
+<p>The command below is used to delete a Helm release</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm delete website
+helm list <span class="nt">--all</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong><em>Learning</em></strong></p>
+
+  <ul>
+    <li>A simple delete does not delete the Helm release history</li>
+  </ul>
+</blockquote>
+
+<p>Completely remove the release</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm delete website <span class="nt">--purge</span>
+helm list <span class="nt">--all</span>
+</code></pre></div></div>
+
+<h2 id="deploy-from-an-existing-chart">Deploy from an existing Chart<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#deploy-from-an-existing-chart" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+
+<p>Helm uses multiple way to configure the chart to be deployed, you can use multiple values file in addition to command line interface (cli) parameters.</p>
+
+<h3 id="install">Install<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#install" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl create namespace helm-demo2
+
+helm <span class="nb">install</span> <span class="nt">--namespace</span> helm-demo2 <span class="nt">--name</span> website2 <span class="nt">-f</span> values.yaml <span class="nt">--set</span> cloneHtdocsFromGit.repository<span class="o">=</span><span class="s2">"https://lgil3:</span><span class="nv">$GITHUB_PAT</span><span class="s2">@github.dxc.com/Platform-DXC/devcloud-docs.git"</span> bitnami/apache <span class="nt">--version</span> 7.3.16
+</code></pre></div></div>
+
+<p>The above command will read the configuration from the values.yaml file and overwrite the parameter cloneHtdocsFromGit.repository with the cli value. This precedence mechanism is useful to pass secrets to the chart from the execution context.</p>
+
+<h3 id="verify">Verify<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#verify" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+
+<p>Verify pods are up and ready</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get pods <span class="nt">-n</span> helm-demo2
+</code></pre></div></div>
+
+<p>List the installed Helm releases</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm list
+</code></pre></div></div>
+
+<h3 id="navigate">Navigate<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#navigate" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+
+<p>Open the <a href="http://localhost/">http://localhost</a> url to read the devcloud web site.</p>
+
+<blockquote>
+  <p><strong><em>Learnings</em></strong></p>
+
+  <ul>
+    <li>Helm can deploy packages from Helm repositories.</li>
+    <li>A Helm chart can be configured from a configuration file or from the CLI</li>
+    <li>There is a configuration order of precedence between Helm configuration files and CLI</li>
+  </ul>
+</blockquote>
+
+<h3 id="upgrade">Upgrade<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#upgrade" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm upgrade <span class="nt">--namespace</span> helm-demo2 <span class="nt">-f</span> values.yaml <span class="nt">--set</span> cloneHtdocsFromGit.repository<span class="o">=</span><span class="s2">"https://lgil3:</span><span class="nv">$GITHUB_PAT</span><span class="s2">@github.dxc.com/Platform-DXC/devcloud-docs.git"</span> website2 bitnami/apache <span class="nt">--version</span> 7.3.17
+</code></pre></div></div>
+
+<h3 id="list-history-version">List history version<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#list-history-version" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm <span class="nb">history </span>website2
+</code></pre></div></div>
+
+<h3 id="rollback">Rollback<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#rollback" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm rollback website2 1
+</code></pre></div></div>
+
+<p><img src="./tutorials _helm_files/questions.png" alt=""></p>
+
+<h1 id="advanced-usage">Advanced usage</h1>
+
+<h2 id="helm-chart-rendering">Helm chart rendering<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#helm-chart-rendering" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm template <span class="nt">-f</span> values.yaml <span class="nt">-f</span> values-apache.yaml ./
+</code></pre></div></div>
+
+<h2 id="inject-files-in-template">Inject files in template<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#inject-files-in-template" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+
+<ul>
+  <li>Create a configuration file</li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s1">'#Configuration file'</span> <span class="o">&gt;</span> config
+<span class="nb">echo</span> <span class="s1">'image: '</span> <span class="o">&gt;&gt;</span> config
+<span class="nb">echo</span> <span class="s1">'tag: '</span> <span class="o">&gt;&gt;</span> config
+</code></pre></div></div>
+
+<ul>
+  <li>Create a configmap file</li>
+</ul>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">ConfigMap</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">creationTimestamp</span><span class="pi">:</span> <span class="s">2016-02-18T18:52:05Z</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">config</span>
+<span class="na">data</span><span class="pi">:</span>
+  <span class="na">config</span><span class="pi">:</span> <span class="pi">|-</span>
+    <span class="s">{{ .Files.Get "config" | indent 4 }}</span>
+  
+</code></pre></div></div>
+
+<ul>
+  <li>Render the chart</li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm template <span class="nt">-f</span> values.yaml <span class="nt">-f</span> values-apache.yaml ./
+</code></pre></div></div>
+
+<h2 id="templating">Templating<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#templating" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+
+<ul>
+  <li>Replace the content of the configmap with</li>
+</ul>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">ConfigMap</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">config</span>
+<span class="na">data</span><span class="pi">:</span>
+  <span class="na">config</span><span class="pi">:</span> <span class="pi">|-</span>
+    <span class="s">{{ .Files.Get "config" | indent 4 }}</span>
+  <span class="na">config2</span><span class="pi">:</span> <span class="pi">|-</span>
+    <span class="s">{{ tpl (.Files.Get "config") . | indent 4 }}</span>
+</code></pre></div></div>
+
+<h2 id="loop">Loop<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#loop" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+
+<ul>
+  <li>Replace the content of the configmap with</li>
+</ul>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">ConfigMap</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">config</span>
+<span class="na">data</span><span class="pi">:</span>
+  <span class="na">config</span><span class="pi">:</span> <span class="pi">|-</span>
+    <span class="s">{{ .Files.Get "config" | indent 4 }}</span>
+  <span class="na">config2</span><span class="pi">:</span> <span class="pi">|-</span>
+    <span class="s">{{ tpl (.Files.Get "config") . | indent 4 }}</span>
+  <span class="pi">{{</span><span class="nv">- $files</span> <span class="pi">:</span><span class="nv">= .Files</span> <span class="pi">}}</span>
+  <span class="pi">{{</span><span class="nv">- range tuple "values.yaml" "values-apache.yaml"</span><span class="pi">}}</span>
+  <span class="pi">{{</span> <span class="nv">.</span> <span class="pi">}}:</span> <span class="pi">|-</span>
+    <span class="s">{{ $files.Get . | indent 4 }}</span>
+  <span class="pi">{{</span><span class="nv">- end</span> <span class="pi">}}</span>
+</code></pre></div></div>
+
+<h2 id="flow-control">Flow Control<a class="anchorjs-link " href="https://github.dxc.com/pages/lgil3/tutorials/kubernetes-helm/#flow-control" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h2>
+
+<ul>
+  <li>Replace the content of the configmap with</li>
+</ul>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">ConfigMap</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">config</span>
+<span class="na">data</span><span class="pi">:</span>
+<span class="pi">{{</span> <span class="nv">if and $.Values.replicaCount (gt $.Values.replicaCount 1.0)</span> <span class="pi">}}</span>
+  <span class="na">config</span><span class="pi">:</span> <span class="pi">|-</span>
+  <span class="s">{{ .Files.Get "config" | indent 4 }}</span>
+<span class="pi">{{</span> <span class="nv">else</span> <span class="pi">}}</span>
+  <span class="na">config2</span><span class="pi">:</span> <span class="pi">|-</span>
+    <span class="s">{{ tpl (.Files.Get "config") . | indent 4 }}</span>
+  <span class="pi">{{</span><span class="nv">- $files</span> <span class="pi">:</span><span class="nv">= .Files</span> <span class="pi">}}</span>
+  <span class="pi">{{</span><span class="nv">- range tuple "values.yaml" "values-apache.yaml"</span><span class="pi">}}</span>
+  <span class="pi">{{</span> <span class="nv">.</span> <span class="pi">}}:</span> <span class="pi">|-</span>
+    <span class="s">{{ $files.Get . | indent 4 }}</span>
+  <span class="pi">{{</span><span class="nv">- end</span> <span class="pi">}}</span>
+<span class="pi">{{</span><span class="nv">end</span><span class="pi">}}</span>
+</code></pre></div></div>
+
+
+      
+    </div>
+    <script src="./tutorials _helm_files/anchor.min.js.téléchargement" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+    
+  
+
+</body></html>
