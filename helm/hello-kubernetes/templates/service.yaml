@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2020-06-09T19:50:54Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:externalTrafficPolicy: {}
+        f:ports:
+          .: {}
+          k:{"port":8080,"protocol":"TCP"}:
+            .: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector:
+          .: {}
+          f:app: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: kubectl
+    operation: Update
+    time: "2020-06-09T19:50:54Z"
+  name: hello-kubernetes
+  namespace: default
+  resourceVersion: "2585"
+  selfLink: /api/v1/namespaces/default/services/hello-kubernetes
+  uid: 48ff2d76-4ebb-454c-9301-13e5c4766105
+spec:
+  clusterIP: 10.110.105.138
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 32422
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: hello-kubernetes
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}
